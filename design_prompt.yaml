@@ -1,0 +1,264 @@
+# ============================================================
+#  design_prompt.yaml
+#  抽象デザインプロンプト — 任意のサイトに流用可能
+#  分析ソース:
+#    - 制作サイト (AI Portfolio / dark tech aesthetic)
+#    - 参考サイト (nailbar.co.jp / premium light aesthetic)
+# ============================================================
+
+meta:
+  theme_name: "Dark Tech Premium"
+  version: "1.0"
+  reuse_note: >
+    具体的なコンテンツ・レイアウト構造を含まない。
+    配色・雰囲気・インタラクション哲学のみを定義する。
+    医療、SaaS、クリエイター、飲食など業種を問わず適用可能。
+
+
+# ──────────────────────────────────────
+#  MOOD（世界観・感情ターゲット）
+# ──────────────────────────────────────
+mood:
+  keywords:
+    - futuristic       # 未来感
+    - premium          # 高品質・上質
+    - minimal          # 余分な装飾を排除
+    - confident        # 自信・専門性の提示
+    - atmospheric      # 空気感・没入感
+    - cutting-edge     # 先端技術・革新性
+
+  emotional_intent: >
+    訪問者に「信頼できる専門家」という印象を与えながら、
+    視覚的な静けさの中に先進性を感じさせる。
+    興奮させるより「安心と好奇心」を同時に生む。
+
+  anti_keywords:
+    - loud             # 派手・騒がしい
+    - cluttered        # 情報過多
+    - retro            # レトロ・懐古的
+    - casual           # 気軽すぎる
+    - saturated        # 彩度過多
+
+
+# ──────────────────────────────────────
+#  PALETTE（カラーシステム）
+# ──────────────────────────────────────
+palette:
+  philosophy: >
+    限りなく暗い背景が「深さと集中」を生む。
+    アクセントカラーは1色に絞り、全体に対して5〜10%程度だけ使う。
+    色を「足す」のではなく「光らせる」感覚で配色する。
+
+  base:
+    role: "最深背景 — 視覚の起点"
+    character: "冷色寄りのニアブラック（青黒 or 紫黒）"
+    lightness_range: "L 4〜8%"
+    avoid: "純粋な #000（平坦すぎる）、暖色系の黒"
+
+  surface:
+    role: "カード・パネル背景"
+    character: "ベースより僅かに明るい暗色。白は絶対に使わない。"
+    technique: "rgba(255,255,255, 0.02〜0.05) をベース上に重ねる"
+
+  accent_primary:
+    role: "ブランドエネルギー — CTA・ロゴ・アクティブ状態"
+    character: "電気的・発光的。シアン / エレクトリックブルー / ネオンミント / ビビッドバイオレット"
+    hue_range: "170°〜260°（青緑〜青紫）"
+    avoid: "暖色（赤・オレンジ・黄）"
+    usage_ratio: "全体の視覚面積の5〜10%以内"
+
+  accent_secondary:
+    role: "奥行き・グラデーション端点"
+    character: "プライマリから30〜60°ずらした補色寄りの色"
+    usage: "グラデーションの終端のみ。単独テキスト色には使わない"
+
+  text:
+    primary: "オフホワイト — 純白 #fff は避ける。冷色の微細なティント推奨"
+    secondary: "ミッドグレー — 明度40〜50%。キャプション・補足文に"
+    on_accent: "純ブラック — アクセント色ボタン上のラベル"
+
+  borders:
+    philosophy: "境界線は『空間の定義』であり装飾ではない。ほぼ見えない程度に留める"
+    default_opacity: "rgba(white, 0.06〜0.10)"
+    accent_border_opacity: "rgba(accent, 0.15〜0.25) — フォーカス・ホバー時のみ"
+
+
+# ──────────────────────────────────────
+#  TYPOGRAPHY（タイポグラフィ）
+# ──────────────────────────────────────
+typography:
+  philosophy: >
+    超小さな大文字ラベル と 大きく太いヘッドラインの落差が
+    色に頼らずヒエラルキーを形成する。
+    文字そのものに重量と空気を持たせる。
+
+  heading:
+    weight: "Extra-Bold〜Black (700〜900)"
+    size_method: "clamp() でビューポート連動"
+    line_height: "タイト: 1.0〜1.2"
+    effect: "グラデーション塗り — white→accentの対角135°"
+    gradient_split: "白が先頭40〜50%、残りがアクセント"
+
+  section_label:
+    case: "UPPERCASE（全大文字）"
+    letter_spacing: "0.25em〜0.35em"
+    size: "0.70〜0.80rem"
+    color: "primary accent 100%"
+    position: "セクションタイトルの直上"
+    role: "セクション識別子。本文ではなくナビゲーション補助"
+
+  body:
+    weight: "Regular (400)"
+    line_height: "ゆったり: 1.7〜1.8"
+    color: "secondary text (muted gray)"
+    max_width: "48〜56ch（1行あたりの最適読書幅）"
+
+  badge_tag:
+    shape: "pill（border-radius: 999px）"
+    background: "accent 5〜10% opacity"
+    border: "1px solid accent 20〜30% opacity"
+    text_color: "accent"
+    size: "0.75〜0.85rem"
+    tracking: "わずかに広め 0.02〜0.05em"
+
+
+# ──────────────────────────────────────
+#  SPACING（余白・密度）
+# ──────────────────────────────────────
+spacing:
+  philosophy: >
+    暗いサイトで余白を惜しむと圧迫感が出る。
+    余白は「高級感の演出」と認識し、意図的に広く取る。
+    セクション間は「部屋が変わる」感覚の大きな間隔。
+
+  section_vertical: "5rem〜8rem（上下）"
+  section_horizontal: "3rem〜5rem（左右）"
+  content_max_width: "1200〜1440px"
+  base_unit: "0.5rem（すべての間隔はこの倍数）"
+  section_divider: "1px hairline, rgba(white, 0.06)"
+
+
+# ──────────────────────────────────────
+#  SURFACES（面・素材感）
+# ──────────────────────────────────────
+surfaces:
+  card:
+    background: "rgba(white, 0.02〜0.04)"
+    border: "1px solid rgba(white, 0.07〜0.10)"
+    border_radius: "1rem〜1.5rem"
+    hover_border: "border-color → rgba(accent, 0.25〜0.30)"
+
+  header:
+    treatment: "フロストガラス — backdrop-filter: blur(10〜16px)"
+    background: "base-color at 80〜90% opacity"
+    border_bottom: "1px solid rgba(accent, 0.08〜0.12)"
+    behavior: "position: fixed / sticky"
+
+  glow_orb:
+    technique: "::before pseudo-element + radial-gradient"
+    color: "primary accent at 6〜12% opacity"
+    size: "400〜700px diameter"
+    position: "hero中央背後 または 特定セクション背後"
+    purpose: "大気感の演出。光源ではなく『空気』"
+
+  image_container:
+    overflow: "hidden"
+    border_radius: "0.75rem〜1rem"
+    hover: "内部画像を scale(1.04〜1.06)"
+
+
+# ──────────────────────────────────────
+#  EFFECTS（視覚エフェクト）
+# ──────────────────────────────────────
+effects:
+  text_gradient_fill:
+    when: "メインヘッドライン"
+    technique: "background-clip: text + linear-gradient"
+    direction: "135deg"
+    palette: "white(先頭40%) → primary accent(末尾)"
+
+  hover_glow:
+    property: "box-shadow"
+    recipe: "0 0 24px rgba(accent, 0.45〜0.55)"
+    transition: "0.2〜0.25s ease"
+
+  hover_lift:
+    property: "transform: translateY(-2px〜-4px)"
+    combine_with: "hover_glow"
+    use_on: "CTAボタン・インタラクティブカード"
+
+  image_overlay_on_hover:
+    gradient: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%)"
+    opacity_transition: "0 → 1 on hover, 0.3s"
+    shows: "テキストラベル or アイコン"
+
+  scroll_reveal:
+    initial_state: "opacity: 0; transform: translateY(24px)"
+    trigger: "IntersectionObserver threshold: 0.10"
+    final_state: "opacity: 1; transform: translateY(0)"
+    duration: "0.55〜0.65s ease"
+    stagger: "兄弟要素: 0.10〜0.15s delay差"
+
+
+# ──────────────────────────────────────
+#  INTERACTIONS（インタラクション哲学）
+# ──────────────────────────────────────
+interactions:
+  philosophy: >
+    「生きている感」を示すが過剰に演出しない。
+    遷移は短く目的的。ユーザーを待たせない。
+
+  default_transition: "all 0.20〜0.25s ease"
+
+  navigation:
+    rest: "text-color: secondary"
+    hover: "text-color → primary accent"
+    no_underline: true
+
+  button_primary:
+    rest: "solid accent fill, black text"
+    hover: "glow shadow + translateY(-2px)"
+
+  button_ghost:
+    rest: "transparent bg, border rgba(white,0.20)"
+    hover: "border-color + text-color → accent"
+
+  form_input:
+    rest: "border: 1px solid rgba(white, 0.10)"
+    focus: "border-color → primary accent（outlineは非表示）"
+
+
+# ──────────────────────────────────────
+#  LIGHT VARIANT（ライト版転換ガイド）
+#  参考: nailbar.co.jp 系の上品ライトデザイン
+# ──────────────────────────────────────
+light_variant:
+  note: >
+    同じ「抽象品質感」をライトモードで表現する場合の変換ルール。
+    エレガントなサービス業・飲食・ウェルネス等に適する。
+
+  palette_swap:
+    base: "純白〜オフホワイト (#fff, #fafaf8)"
+    surface: "rgba(black, 0.02〜0.03)"
+    accent: "ダスティローズ / セージ / シャンパン / ソフトテラコッタ"
+    text_primary: "ディープチャコール (#1a1a1a〜#2d2d2d)"
+    text_secondary: "ミッドグレー (#888〜#aaa)"
+    borders: "rgba(black, 0.08〜0.12)"
+
+  typography_shift:
+    heading_weight: "Light〜Regular (300〜500)"
+    heading_style: "オプション: セリフ体で優雅さ++"
+    body_line_height: "1.9〜2.0（さらにゆったり）"
+
+  effects_shift:
+    glow_orb: "使用しない（ライトでは光は不自然）"
+    hover_glow: "box-shadow → subtle drop-shadow (no glow)"
+    text_gradient: "単色に戻す or 白→淡いアクセント"
+
+  mood_keywords:
+    - elegant
+    - airy
+    - trustworthy
+    - feminine
+    - refined
+    - timeless

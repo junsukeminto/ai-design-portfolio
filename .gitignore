@@ -1,0 +1,7 @@
+node_modules/
+*.png
+*.yaml
+!design_prompt.yaml
+_ss_temp.html
+screenshot.mjs
+package*.json
