@@ -5,36 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="生成AIを活用したネイルデザイン制作の成果物をまとめたポートフォリオサイトです。">
   <meta property="og:title" content="AI Design Portfolio">
-  <meta property="og:description" content="生成AIで生まれる、新しいデザインの世界へ。">
+  <meta property="og:description" content="AIとともに生まれる、新しいネイルデザインの世界。">
   <meta property="og:type" content="website">
   <title>AI Design Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
   <style>
     /* ═══════════════════════════════════════
-       DESIGN TOKENS — Dark Tech Premium
+       DESIGN TOKENS — 和モダン Premium（Wabi-Tech）
+       参照: design_prompt.yaml v2.0
     ═══════════════════════════════════════ */
     :root {
       /* palette */
-      --bg:             #07090f;
-      --bg-mid:         #0b0d16;
-      --surface:        rgba(255,255,255,.028);
-      --surface-hover:  rgba(255,255,255,.048);
-      --accent:         #00d4ff;
-      --accent-rgb:     0,212,255;
-      --accent2:        #7c3aed;
-      --accent2-rgb:    124,58,237;
-      --text:           #e4e8f0;
-      --text-muted:     #6b7280;
-      --border:         rgba(255,255,255,.07);
-      --border-accent:  rgba(0,212,255,.18);
+      --bg:            #1a1814;
+      --bg-mid:        #141210;
+      --surface:       rgba(245,240,232,.04);
+      --surface-hover: rgba(245,240,232,.07);
+      --accent:        #c9a84c;   /* 金茶 */
+      --accent-rgb:    201,168,76;
+      --text:          #f5f0e8;   /* 和紙色 */
+      --text-muted:    #7a7370;   /* 煤色 */
+      --border:        rgba(245,240,232,.08);
+      --border-accent: rgba(201,168,76,.20);
 
       /* layout */
-      --header-h:     72px;
-      --max-w:        1280px;
-      --pad-x:        clamp(1.5rem, 5vw, 5rem);
-      --section-py:   clamp(5rem, 9vw, 8rem);
+      --header-h:    72px;
+      --max-w:       1200px;
+      --pad-x:       clamp(1.5rem, 5vw, 5rem);
+      --section-py:  clamp(5rem, 10vw, 9rem);
     }
 
     /* ═══════════════════════════════════════
@@ -45,11 +44,25 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
       font-weight: 300;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
+
+    /* 和紙テクスチャ（washi_layer） */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: soft-light;
+    }
+
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; cursor: pointer; }
@@ -66,49 +79,80 @@
     section { padding-block: var(--section-py); }
 
     /* ═══════════════════════════════════════
-       TYPOGRAPHY
+       TYPOGRAPHY — 明朝体の格調
     ═══════════════════════════════════════ */
     .section-label {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      font-family: 'Cormorant Garamond', 'EB Garamond', serif;
+      font-size: .72rem;
+      font-weight: 400;
+      letter-spacing: .36em;
+      text-transform: lowercase;
+      color: rgba(var(--accent-rgb), .80);
+      margin-bottom: 1.2rem;
+    }
+    .section-label::before {
+      content: '';
       display: block;
-      font-family: 'Inter', sans-serif;
-      font-size: .70rem;
-      font-weight: 500;
-      letter-spacing: .30em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: .9rem;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width .9s ease;
     }
+    .section-label.visible::before { width: 28px; }
 
-    .heading-gradient {
-      font-family: 'Inter', sans-serif;
-      font-weight: 900;
-      line-height: 1.08;
-      background: linear-gradient(135deg, #ffffff 0%, #ffffff 45%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .h-en {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.2rem, 4.5vw, 4rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.2;
+      letter-spacing: .04em;
+      color: var(--text);
     }
-
-    .h1 { font-size: clamp(2.8rem, 6vw, 5.5rem); }
-    .h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
-
-    .body-text {
-      font-size: .92rem;
-      line-height: 1.85;
+    .h-ja {
+      font-family: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+      font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+      font-weight: 300;
+      line-height: 1.5;
+      letter-spacing: .08em;
+      color: var(--text);
+    }
+    .sub-label {
+      font-size: .72rem;
+      font-weight: 300;
+      letter-spacing: .16em;
       color: var(--text-muted);
-      max-width: 52ch;
+      margin-top: .5rem;
+      margin-bottom: 2rem;
     }
+    .body-text {
+      font-size: .90rem;
+      line-height: 2.0;
+      color: var(--text-muted);
+      max-width: 44ch;
+    }
+    .rule {
+      width: 0;
+      height: 1px;
+      background: rgba(var(--accent-rgb), .25);
+      margin-block: 1.6rem;
+      transition: width .9s ease .2s;
+    }
+    .rule.visible { width: 40px; }
 
     .tag {
       display: inline-flex;
       align-items: center;
-      font-size: .74rem;
+      font-size: .70rem;
       font-weight: 400;
-      letter-spacing: .04em;
-      padding: .28rem .85rem;
-      border-radius: 999px;
-      background: rgba(var(--accent-rgb), .08);
-      border: 1px solid rgba(var(--accent-rgb), .22);
+      letter-spacing: .10em;
+      padding: .24rem .75rem;
+      border-radius: 4px;
+      background: rgba(var(--accent-rgb), .07);
+      border: 1px solid rgba(var(--accent-rgb), .18);
       color: var(--accent);
     }
 
@@ -118,54 +162,54 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: .55rem;
-      font-family: 'Inter', sans-serif;
-      font-size: .74rem;
-      font-weight: 500;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      padding: .9rem 2rem;
-      border-radius: 4px;
+      gap: .6rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .88rem;
+      font-weight: 400;
+      letter-spacing: .18em;
+      padding: .85rem 2.2rem;
+      border-radius: 3px;
       border: 1px solid transparent;
-      transition: all .22s ease;
+      transition: all .40s ease;
     }
     .btn-primary {
-      background: var(--accent);
-      color: #000;
+      background: rgba(var(--accent-rgb), .90);
+      color: #1a1814;
       border-color: var(--accent);
     }
     .btn-primary:hover {
-      box-shadow: 0 0 28px rgba(var(--accent-rgb), .50);
-      transform: translateY(-2px);
+      background: var(--accent);
+      box-shadow: 0 2px 14px rgba(var(--accent-rgb), .22);
+      transform: translateY(-1px);
     }
     .btn-ghost {
       background: transparent;
-      border-color: rgba(255,255,255,.20);
+      border-color: rgba(245,240,232,.22);
       color: var(--text);
     }
     .btn-ghost:hover {
-      border-color: var(--accent);
+      border-color: rgba(var(--accent-rgb), .50);
       color: var(--accent);
     }
-    .btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .btn svg { width: 12px; height: 12px; flex-shrink: 0; }
 
     /* ═══════════════════════════════════════
-       HEADER
+       HEADER — 障子越しの光
     ═══════════════════════════════════════ */
     #header {
       position: fixed;
       inset: 0 0 auto;
       z-index: 300;
       height: var(--header-h);
-      background: rgba(7,9,15,.88);
-      backdrop-filter: blur(14px) saturate(140%);
-      -webkit-backdrop-filter: blur(14px) saturate(140%);
-      border-bottom: 1px solid rgba(var(--accent-rgb), .09);
-      transition: box-shadow .3s, border-color .3s;
+      background: rgba(26,24,20,.88);
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      border-bottom: 1px solid rgba(var(--accent-rgb), .08);
+      transition: border-color .4s, box-shadow .4s;
     }
     #header.scrolled {
-      border-bottom-color: rgba(var(--accent-rgb), .18);
-      box-shadow: 0 4px 40px rgba(0,0,0,.4);
+      border-bottom-color: rgba(var(--accent-rgb), .14);
+      box-shadow: 0 2px 24px rgba(0,0,0,.35);
     }
     .header-inner {
       height: 100%;
@@ -174,39 +218,48 @@
       justify-content: space-between;
     }
     .logo {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: .06em;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: .10em;
+      color: var(--text);
     }
-    .logo-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(var(--accent-rgb), .8);
+    .logo-kana {
+      display: block;
+      font-style: normal;
+      font-size: .50rem;
+      letter-spacing: .30em;
+      color: var(--text-muted);
+      margin-top: .15rem;
     }
     .nav-bar {
       display: flex;
       align-items: center;
-      gap: 2.5rem;
+      gap: 2.8rem;
     }
     .nav-bar a {
-      font-family: 'Inter', sans-serif;
-      font-size: .72rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .80rem;
       font-weight: 400;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+      letter-spacing: .16em;
       color: var(--text-muted);
-      transition: color .2s;
+      transition: color .35s;
+      position: relative;
     }
-    .nav-bar a:hover { color: var(--accent); }
+    .nav-bar a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width .40s ease;
+    }
+    .nav-bar a:hover { color: var(--text); }
+    .nav-bar a:hover::after { width: 100%; }
 
-    /* hamburger */
     .nav-toggle {
       display: none;
       flex-direction: column;
@@ -217,10 +270,10 @@
     }
     .nav-toggle span {
       display: block;
-      width: 22px;
+      width: 20px;
       height: 1px;
-      background: var(--text);
-      transition: transform .25s, opacity .25s;
+      background: var(--text-muted);
+      transition: transform .30s, opacity .30s;
     }
     .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
     .nav-toggle.open span:nth-child(2) { opacity: 0; }
@@ -232,183 +285,151 @@
     #hero {
       position: relative;
       min-height: 100svh;
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       padding-top: var(--header-h);
       overflow: hidden;
     }
 
-    /* glow orb */
-    #hero::before {
+    /* 墨の滲み — 背後のグラデーション */
+    #hero::after {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -55%);
-      width: 640px;
-      height: 640px;
+      top: 30%;
+      left: 30%;
+      width: 600px;
+      height: 600px;
       border-radius: 50%;
       background: radial-gradient(
         circle,
-        rgba(var(--accent-rgb), .09) 0%,
-        rgba(var(--accent2-rgb), .05) 50%,
-        transparent 70%
+        rgba(var(--accent-rgb), .05) 0%,
+        transparent 65%
       );
       pointer-events: none;
       z-index: 0;
     }
 
-    .hero-inner {
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem var(--pad-x) 4rem clamp(1.5rem, 5vw, 5rem);
       position: relative;
       z-index: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(3rem, 6vw, 6rem);
-      align-items: center;
-      width: 100%;
     }
-    .hero-text {}
-    .hero-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      margin-bottom: 1.6rem;
-    }
-    .hero-eyebrow-line {
-      width: 32px;
-      height: 1px;
-      background: var(--accent);
-    }
-    .hero-catch {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: clamp(.92rem, 1.4vw, 1.08rem);
+    .hero-h {
+      font-family: 'Noto Serif JP', 'Yu Mincho', serif;
+      font-size: clamp(1.8rem, 3.2vw, 3rem);
       font-weight: 300;
-      line-height: 1.55;
-      color: var(--text-muted);
-      margin-top: 1.5rem;
-      margin-bottom: 2.5rem;
-      max-width: 44ch;
+      line-height: 1.65;
+      letter-spacing: .10em;
+      color: var(--text);
+      margin-bottom: 1.4rem;
     }
-    .hero-cta { display: flex; gap: .8rem; flex-wrap: wrap; }
-
-    .hero-visual {
-      position: relative;
-    }
-    .hero-img-wrap {
-      position: relative;
-      border-radius: 1.2rem;
-      overflow: hidden;
-      aspect-ratio: 4/5;
-    }
-    .hero-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(.9) saturate(.9);
-      transition: transform 8s ease;
-    }
-    #hero:hover .hero-img-wrap img { transform: scale(1.04); }
-    .hero-img-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      border: 1px solid rgba(var(--accent-rgb), .14);
-      pointer-events: none;
-    }
-
-    /* floating stats */
-    .hero-stats {
-      position: absolute;
-      bottom: -1.5rem;
-      left: -2rem;
-      background: rgba(7,9,15,.80);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      border-radius: .75rem;
-      padding: 1rem 1.4rem;
-      display: flex;
-      gap: 1.6rem;
-    }
-    .stat-item { text-align: center; }
-    .stat-num {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
+    .hero-h em {
+      font-style: normal;
       color: var(--accent);
-      line-height: 1;
     }
-    .stat-label {
-      font-size: .60rem;
-      letter-spacing: .12em;
+    .hero-sub {
+      font-size: .88rem;
+      line-height: 2.0;
+      letter-spacing: .06em;
       color: var(--text-muted);
-      margin-top: .25rem;
-      text-transform: uppercase;
+      margin-bottom: 2.8rem;
     }
+    .hero-cta { display: flex; gap: .9rem; flex-wrap: wrap; }
 
     /* scroll indicator */
     .scroll-hint {
       position: absolute;
       bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+      left: clamp(1.5rem, 5vw, 5rem);
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: .5rem;
-      font-family: 'Inter', sans-serif;
+      gap: .7rem;
+      font-family: 'Cormorant Garamond', serif;
       font-size: .60rem;
-      letter-spacing: .22em;
-      text-transform: uppercase;
+      letter-spacing: .30em;
       color: var(--text-muted);
       z-index: 1;
     }
-    .scroll-hint::after {
+    .scroll-hint::before {
       content: '';
       display: block;
       width: 1px;
       height: 40px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollLine 2s ease-in-out infinite;
+      background: linear-gradient(to bottom, transparent, var(--accent));
+      animation: scrollLine 2.2s ease-in-out infinite;
     }
     @keyframes scrollLine {
-      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
-      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
       51%  { transform-origin: bottom; }
-      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* hero visual — 墨が紙に滲む ink wash reveal */
+    .hero-visual {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .hero-img-clip {
+      height: 100%;
+      clip-path: inset(100% 0 0 0);
+      animation: inkWash 1.2s cubic-bezier(0.77,0,.175,1) .4s forwards;
+    }
+    @keyframes inkWash {
+      to { clip-path: inset(0% 0 0 0); }
+    }
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      filter: brightness(.85) saturate(.78);
+    }
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(26,24,20,.60) 0%,
+        rgba(26,24,20,.10) 50%,
+        transparent 100%
+      );
+      pointer-events: none;
     }
 
     /* ═══════════════════════════════════════
-       ABOUT / CONCEPT
+       ABOUT
     ═══════════════════════════════════════ */
     #about {
       border-top: 1px solid var(--border);
       background: var(--bg-mid);
       position: relative;
-      overflow: hidden;
     }
     #about::before {
       content: '';
       position: absolute;
-      top: -200px;
-      right: -200px;
+      top: -150px;
+      right: -100px;
       width: 500px;
       height: 500px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(var(--accent2-rgb),.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(var(--accent-rgb),.04) 0%, transparent 70%);
       pointer-events: none;
     }
     .about-grid {
       position: relative;
-      z-index: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: clamp(3rem, 6vw, 7rem);
+      gap: clamp(3rem, 7vw, 8rem);
       align-items: center;
     }
     .about-photo {
       aspect-ratio: 4/5;
-      border-radius: 1.2rem;
       overflow: hidden;
       position: relative;
       border: 1px solid var(--border);
@@ -417,77 +438,112 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: saturate(.80) brightness(.9);
-      transition: transform .7s ease, filter .7s ease;
+      filter: saturate(.75) brightness(.88);
+      transition: transform .8s ease, filter .8s ease;
     }
-    .about-photo:hover img { transform: scale(1.05); filter: saturate(.95) brightness(.95); }
-
-    .about-text .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .45rem;
-      margin-top: 1.8rem;
+    .about-photo:hover img {
+      transform: scale(1.03);
+      filter: saturate(.88) brightness(.92);
     }
+    /* 落款風アクセント */
+    .about-photo::before {
+      content: '';
+      position: absolute;
+      inset: -8px 8px 8px -8px;
+      border: 1px solid rgba(var(--accent-rgb), .18);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.8rem; }
 
     /* ═══════════════════════════════════════
-       WORKS GALLERY
+       GALLERY — 作品一覧
     ═══════════════════════════════════════ */
-    #works {
-      border-top: 1px solid var(--border);
-    }
+    #works { border-top: 1px solid var(--border); }
     .works-head { text-align: center; margin-bottom: 3.5rem; }
-    .works-head .h2 { margin-top: .5rem; }
+    .works-head .section-label { justify-content: center; }
+    .works-head .section-label::before { display: none; }
+    .works-head .rule { margin-inline: auto; }
+
+    /* filter tabs */
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: .70rem;
+      font-weight: 300;
+      letter-spacing: .14em;
+      padding: .38rem 1rem;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      transition: all .35s ease;
+      cursor: pointer;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: rgba(var(--accent-rgb), .40);
+      color: var(--accent);
+      background: rgba(var(--accent-rgb), .06);
+    }
 
     .gallery {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: .6rem;
+      gap: .5rem;
     }
     .gallery-item {
       aspect-ratio: 1;
       overflow: hidden;
       position: relative;
-      border-radius: .75rem;
-      cursor: pointer;
       border: 1px solid var(--border);
-      transition: border-color .25s;
+      cursor: crosshair;
+      transition: border-color .40s ease;
     }
     .gallery-item:hover {
-      border-color: rgba(var(--accent-rgb), .28);
+      border-color: rgba(var(--accent-rgb), .25);
     }
     .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: brightness(.85) saturate(.80);
-      transition: transform .55s ease, filter .55s ease;
+      filter: brightness(.82) saturate(.78);
+      transition: transform .65s ease, filter .65s ease;
     }
     .gallery-item:hover img {
-      transform: scale(1.06);
-      filter: brightness(.95) saturate(1);
+      transform: scale(1.03);
+      filter: brightness(.90) saturate(.88);
     }
     .gallery-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.65) 0%, transparent 55%);
+      background: linear-gradient(
+        to top,
+        rgba(26,24,20,.65) 0%,
+        transparent 52%
+      );
       display: flex;
       align-items: flex-end;
       justify-content: center;
       padding-bottom: 1rem;
       opacity: 0;
-      transition: opacity .28s;
+      transition: opacity .45s ease;
     }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
     .overlay-label {
-      font-family: 'Inter', sans-serif;
-      font-size: .62rem;
-      font-weight: 500;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.55);
-      padding: .3rem .85rem;
-      border-radius: 999px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .68rem;
+      font-weight: 400;
+      letter-spacing: .24em;
+      color: rgba(245,240,232,.88);
+      border: 1px solid rgba(245,240,232,.40);
+      padding: .28rem .80rem;
     }
 
     /* lightbox */
@@ -496,39 +552,41 @@
       position: fixed;
       inset: 0;
       z-index: 500;
-      background: rgba(0,0,0,.88);
-      backdrop-filter: blur(8px);
+      background: rgba(26,24,20,.92);
+      backdrop-filter: blur(6px);
       align-items: center;
       justify-content: center;
     }
     .lightbox.active { display: flex; }
     .lightbox-img {
-      max-width: 90vw;
-      max-height: 88vh;
-      border-radius: .75rem;
+      max-width: 88vw;
+      max-height: 86vh;
       object-fit: contain;
+      border: 1px solid var(--border);
     }
     .lightbox-close {
       position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.15);
-      color: #fff;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
+      top: 1.8rem;
+      right: 1.8rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1rem;
       cursor: pointer;
-      transition: background .2s;
+      transition: border-color .35s, color .35s;
     }
-    .lightbox-close:hover { background: rgba(255,255,255,.16); }
+    .lightbox-close:hover {
+      border-color: rgba(var(--accent-rgb), .35);
+      color: var(--accent);
+    }
 
     /* ═══════════════════════════════════════
-       PROCESS
+       PROCESS — 制作の所作
     ═══════════════════════════════════════ */
     #process {
       border-top: 1px solid var(--border);
@@ -538,44 +596,98 @@
     .step-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+      position: relative;
+    }
+    /* 縦区切り線 */
+    .step-grid::before {
+      content: '';
+      position: absolute;
+      left: 33.33%;
+      top: 2rem;
+      bottom: 2rem;
+      width: 1px;
+      background: var(--border);
+    }
+    .step-grid::after {
+      content: '';
+      position: absolute;
+      left: 66.66%;
+      top: 2rem;
+      bottom: 2rem;
+      width: 1px;
+      background: var(--border);
     }
     .step-card {
-      padding: 2.5rem 2rem 3rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 1.2rem;
-      transition: background .22s, border-color .22s, transform .22s, box-shadow .22s;
+      padding: 2.5rem 2.8rem 3rem;
+      transition: background .35s ease;
     }
-    .step-card:hover {
-      background: var(--surface-hover);
-      border-color: rgba(var(--accent-rgb), .22);
-      transform: translateY(-3px);
-      box-shadow: 0 0 24px rgba(var(--accent-rgb), .08);
-    }
+    .step-card:hover { background: var(--surface); }
     .step-num {
-      font-family: 'Inter', sans-serif;
-      font-size: 2.8rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, rgba(var(--accent-rgb),.25), rgba(var(--accent-rgb),.08));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(var(--accent-rgb), .22);
       line-height: 1;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.4rem;
     }
     .step-title {
-      font-family: 'Inter', sans-serif;
-      font-size: .92rem;
-      font-weight: 500;
-      letter-spacing: .04em;
+      font-family: 'Noto Serif JP', 'Yu Mincho', serif;
+      font-size: .90rem;
+      font-weight: 400;
+      letter-spacing: .10em;
       color: var(--text);
-      margin-bottom: .75rem;
+      margin-bottom: .85rem;
     }
     .step-body {
-      font-size: .84rem;
+      font-size: .82rem;
       color: var(--text-muted);
-      line-height: 1.85;
+      line-height: 2.0;
+    }
+
+    /* ═══════════════════════════════════════
+       SHOWCASE — 注目作品
+    ═══════════════════════════════════════ */
+    #showcase { border-top: 1px solid var(--border); }
+    .showcase-head { margin-bottom: 4rem; }
+    .showcase-grid {
+      display: grid;
+      gap: 4rem;
+    }
+    .showcase-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 6rem);
+      align-items: center;
+    }
+    .showcase-item:nth-child(even) .showcase-img { order: 2; }
+    .showcase-item:nth-child(even) .showcase-text { order: 1; }
+    .showcase-img {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .showcase-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(.85) saturate(.78);
+      transition: transform .80s ease;
+    }
+    .showcase-img:hover img { transform: scale(1.03); }
+    .showcase-text {}
+    .showcase-title {
+      font-family: 'Noto Serif JP', 'Yu Mincho', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: .08em;
+      color: var(--text);
+      margin-bottom: .8rem;
+    }
+    .showcase-desc {
+      font-size: .84rem;
+      line-height: 2.0;
+      color: var(--text-muted);
     }
 
     /* ═══════════════════════════════════════
@@ -584,78 +696,77 @@
     #contact {
       border-top: 1px solid var(--border);
       position: relative;
-      overflow: hidden;
     }
     #contact::before {
       content: '';
       position: absolute;
-      bottom: -200px;
-      left: -200px;
-      width: 600px;
-      height: 600px;
+      bottom: -150px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(var(--accent-rgb),.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(var(--accent-rgb),.04) 0%, transparent 65%);
       pointer-events: none;
     }
     .contact-grid {
       position: relative;
-      z-index: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: clamp(3rem, 7vw, 8rem);
       align-items: start;
     }
     .contact-copy {
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(1.7rem, 2.8vw, 2.6rem);
-      font-weight: 700;
-      line-height: 1.3;
-      background: linear-gradient(135deg, #fff 0%, #fff 50%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 1.2rem;
+      font-family: 'Noto Serif JP', 'Yu Mincho', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 300;
+      line-height: 1.8;
+      letter-spacing: .08em;
+      margin-bottom: 1.4rem;
     }
-    .form-row { margin-bottom: 1.5rem; }
+    /* 下線スタイルのフォーム（和風） */
+    .form-row { margin-bottom: 1.6rem; }
     .form-row label {
       display: block;
-      font-family: 'Inter', sans-serif;
-      font-size: .62rem;
-      font-weight: 500;
-      letter-spacing: .18em;
-      text-transform: uppercase;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .68rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: lowercase;
       color: var(--text-muted);
-      margin-bottom: .55rem;
+      margin-bottom: .5rem;
     }
     .form-row input,
     .form-row textarea {
       width: 100%;
-      padding: .8rem 1rem;
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: .5rem;
+      padding: .65rem 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(245,240,232,.14);
       color: var(--text);
       font-size: .88rem;
       font-weight: 300;
-      font-family: inherit;
+      font-family: 'Noto Sans JP', sans-serif;
       outline: none;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color .40s;
     }
     .form-row input::placeholder,
-    .form-row textarea::placeholder { color: rgba(107,114,128,.5); font-size: .84rem; }
+    .form-row textarea::placeholder {
+      color: rgba(122,115,112,.4);
+      font-size: .82rem;
+    }
     .form-row input:focus,
     .form-row textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .10);
+      border-bottom-color: rgba(var(--accent-rgb), .60);
     }
-    .form-row textarea { height: 110px; resize: none; }
-    .form-row.required label::after { content: ' *'; color: var(--accent); }
-    .form-submit { margin-top: 1.8rem; }
+    .form-row textarea { height: 100px; resize: none; }
+    .form-row.required label::after { content: ' —'; color: rgba(var(--accent-rgb),.60); }
+    .form-submit { margin-top: 2.2rem; }
 
     /* ═══════════════════════════════════════
        FOOTER
     ═══════════════════════════════════════ */
     #footer {
+      background: var(--bg-mid);
       border-top: 1px solid var(--border);
       padding-block: 2.5rem;
     }
@@ -667,83 +778,92 @@
       gap: 1rem;
     }
     .footer-logo {
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: .06em;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(245,240,232,.70);
+      letter-spacing: .10em;
     }
     .footer-copy {
-      font-size: .66rem;
-      letter-spacing: .10em;
+      font-size: .62rem;
+      letter-spacing: .14em;
       color: var(--text-muted);
     }
 
     /* ═══════════════════════════════════════
-       SCROLL REVEAL
+       SCROLL REVEAL — 能の所作
     ═══════════════════════════════════════ */
     .reveal {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .60s ease, transform .60s ease;
+      transform: translateY(16px);
+      transition: opacity .80s ease, transform .80s ease;
     }
     .reveal.visible { opacity: 1; transform: none; }
-    .reveal-d1 { transition-delay: .10s; }
-    .reveal-d2 { transition-delay: .22s; }
-    .reveal-d3 { transition-delay: .34s; }
+    .reveal-d1 { transition-delay: .15s; }
+    .reveal-d2 { transition-delay: .30s; }
+    .reveal-d3 { transition-delay: .45s; }
 
     /* ═══════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════ */
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       :root { --header-h: 64px; }
 
-      .header-inner { padding-inline: var(--pad-x); }
       .nav-bar { display: none; }
       .nav-bar.open {
         display: flex;
         flex-direction: column;
         position: absolute;
         top: var(--header-h);
-        left: 0;
-        right: 0;
-        background: rgba(7,9,15,.97);
-        backdrop-filter: blur(16px);
+        left: 0; right: 0;
+        background: rgba(26,24,20,.97);
+        backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--border);
         padding: 1.5rem var(--pad-x);
         gap: 0;
+        z-index: 200;
       }
       .nav-bar.open a {
-        padding-block: .85rem;
-        font-size: .82rem;
+        padding-block: .9rem;
+        font-size: .84rem;
         border-bottom: 1px solid var(--border);
+        color: var(--text-muted);
       }
       .nav-bar.open a:last-child { border-bottom: none; }
       .nav-toggle { display: flex; }
 
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-visual { order: -1; }
-      .hero-img-wrap { aspect-ratio: 16/9; }
-      .hero-stats { bottom: -1rem; left: 1rem; }
+      #hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-visual { height: 56vw; min-height: 300px; }
+      .hero-text { padding: 3rem var(--pad-x); }
       .scroll-hint { display: none; }
 
       .about-grid { grid-template-columns: 1fr; }
-      .about-photo { aspect-ratio: 16/9; }
+      .about-photo { aspect-ratio: 3/2; }
+      .about-photo::before { display: none; }
 
       .gallery { grid-template-columns: repeat(2, 1fr); }
 
-      .step-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .step-grid { grid-template-columns: 1fr; }
+      .step-grid::before, .step-grid::after { display: none; }
+      .step-card {
+        padding: 2rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .step-card:last-child { border-bottom: none; }
+
+      .showcase-item { grid-template-columns: 1fr; }
+      .showcase-item:nth-child(even) .showcase-img { order: 0; }
+      .showcase-item:nth-child(even) .showcase-text { order: 0; }
 
       .contact-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
     }
-
     @media (max-width: 540px) {
       .gallery { grid-template-columns: repeat(2, 1fr); }
       .hero-cta { flex-direction: column; }
       .btn { justify-content: center; }
+      .filter-tabs { gap: .3rem; }
     }
   </style>
 </head>
@@ -753,8 +873,8 @@
 <header id="header" role="banner">
   <div class="container header-inner">
     <a href="#" class="logo" aria-label="AI Portfolio ホームへ">
-      <span class="logo-dot" aria-hidden="true"></span>
       AI Portfolio
+      <span class="logo-kana">ai design works</span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="メニュー" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -768,61 +888,46 @@
   </div>
 </header>
 
+
 <!-- ════ HERO ════ -->
 <main>
 <section id="hero" aria-label="ヒーロー">
-  <div class="container hero-inner">
-    <div class="hero-text reveal">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-line" aria-hidden="true"></span>
-        <span class="section-label" style="margin-bottom:0">AI Development Portfolio</span>
-      </div>
-      <h1 class="heading-gradient h1">
-        生成AIで生まれる、<br>新しいデザインへ。
-      </h1>
-      <p class="hero-catch">
-        最新の画像生成AI技術を駆使して制作した<br>
-        クリエイティブ作品をまとめたポートフォリオです。<br>
-        プロンプトエンジニアリングから実装まで。
-      </p>
-      <div class="hero-cta">
-        <a href="#works" class="btn btn-primary">
-          作品を見る
-          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <a href="#contact" class="btn btn-ghost">お問い合わせ</a>
-      </div>
+  <div class="hero-text">
+    <span class="section-label visible">
+      AI Development Portfolio
+    </span>
+    <h1 class="hero-h">
+      <em>AI</em> とともに生まれる、<br>
+      新しいネイルデザインへ。
+    </h1>
+    <p class="hero-sub">
+      最新の画像生成AI技術を活用して制作した<br>
+      ネイルデザイン作品をまとめたポートフォリオです。<br>
+      プロンプトの設計から仕上げまで。
+    </p>
+    <div class="hero-cta">
+      <a href="#works" class="btn btn-primary">
+        作品を見る
+        <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#contact" class="btn btn-ghost">お問い合わせ</a>
     </div>
-    <div class="hero-visual reveal reveal-d1">
-      <div class="hero-img-wrap">
-        <img src="images/nail-designs/nail-design-05.jpg"
-             alt="AIで生成されたネイルデザイン"
-             width="720" height="900"
-             fetchpriority="high">
-      </div>
-      <div class="hero-stats" aria-label="統計情報">
-        <div class="stat-item">
-          <div class="stat-num">14</div>
-          <div class="stat-label">Works</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">3+</div>
-          <div class="stat-label">AI Tools</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">AI-Made</div>
-        </div>
-      </div>
+    <div class="scroll-hint" aria-hidden="true">scroll</div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-img-clip">
+      <img src="images/nail-designs/nail-design-05.jpg"
+           alt="AIで生成されたネイルデザイン"
+           width="720" height="960"
+           fetchpriority="high">
     </div>
   </div>
-  <div class="scroll-hint" aria-hidden="true">Scroll</div>
 </section>
 
 
-<!-- ════ ABOUT / CONCEPT ════ -->
+<!-- ════ ABOUT ════ -->
 <section id="about" aria-label="コンセプト">
   <div class="container">
     <div class="about-grid">
@@ -832,17 +937,17 @@
              width="600" height="750"
              loading="lazy">
       </div>
-      <div class="about-text reveal reveal-d1">
-        <span class="section-label">Concept</span>
-        <h2 class="heading-gradient h2">AI × Creative</h2>
-        <p style="font-size:.78rem;letter-spacing:.14em;color:var(--text-muted);margin:.5rem 0 1.8rem">AIとクリエイティビティの融合</p>
+      <div class="reveal reveal-d1">
+        <span class="section-label">concept</span>
+        <h2 class="h-ja">AIとクリエイティブの融合</h2>
+        <div class="rule"></div>
         <p class="body-text">
           最新の生成AI技術を活用して、ネイルデザインや
           ビジュアルアートの制作に取り組んでいます。
           プロンプトエンジニアリングからファインチューニングまで、
-          AIの可能性を探求しています。
+          AIの可能性を丁寧に探求しています。
         </p>
-        <div class="tags">
+        <div class="tags" aria-label="使用ツール・スキル">
           <span class="tag">Stable Diffusion</span>
           <span class="tag">Midjourney</span>
           <span class="tag">ChatGPT</span>
@@ -860,58 +965,67 @@
 <section id="works" aria-label="作品ギャラリー">
   <div class="container">
     <div class="works-head reveal">
-      <span class="section-label">Works</span>
-      <h2 class="heading-gradient h2">Nail Design Gallery</h2>
-      <p style="font-size:.78rem;letter-spacing:.14em;color:var(--text-muted);margin-top:.5rem">AI生成 ネイルデザイン一覧</p>
+      <span class="section-label">works</span>
+      <h2 class="h-en">Nail Design Gallery</h2>
+      <p class="sub-label">AI生成 ネイルデザイン一覧</p>
+      <div class="rule"></div>
     </div>
-    <div class="gallery reveal reveal-d1" role="list" aria-label="ネイルデザイン一覧">
-      <div class="gallery-item" role="listitem" tabindex="0">
+
+    <div class="filter-tabs reveal reveal-d1" role="group" aria-label="フィルター">
+      <button class="filter-btn active" data-filter="all">すべて</button>
+      <button class="filter-btn" data-filter="simple">シンプル</button>
+      <button class="filter-btn" data-filter="art">アート</button>
+      <button class="filter-btn" data-filter="season">季節</button>
+    </div>
+
+    <div class="gallery reveal reveal-d2" role="list" aria-label="ネイルデザイン一覧">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="simple">
         <img src="images/nail-designs/nail-design-01.jpg" alt="AI生成ネイルデザイン 01" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
         <img src="images/nail-designs/nail-design-02.jpg" alt="AI生成ネイルデザイン 02" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
         <img src="images/nail-designs/nail-design-03.jpg" alt="AI生成ネイルデザイン 03" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="season">
         <img src="images/nail-designs/nail-design-04.jpg" alt="AI生成ネイルデザイン 04" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
         <img src="images/nail-designs/nail-design-06.jpg" alt="AI生成ネイルデザイン 06" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="simple">
         <img src="images/nail-designs/nail-design-07.jpg" alt="AI生成ネイルデザイン 07" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
         <img src="images/nail-designs/nail-design-08.jpg" alt="AI生成ネイルデザイン 08" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="season">
         <img src="images/nail-designs/nail-design-09.jpg" alt="AI生成ネイルデザイン 09" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="simple">
         <img src="images/nail-designs/nail-design-10.jpg" alt="AI生成ネイルデザイン 10" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
         <img src="images/nail-designs/nail-design-12.jpg" alt="AI生成ネイルデザイン 12" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="season">
         <img src="images/nail-designs/nail-design-13.jpg" alt="AI生成ネイルデザイン 13" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
-      <div class="gallery-item" role="listitem" tabindex="0">
+      <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
         <img src="images/nail-designs/nail-design-14.jpg" alt="AI生成ネイルデザイン 14" loading="lazy" width="400" height="400">
-        <div class="gallery-overlay"><span class="overlay-label">View</span></div>
+        <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
     </div>
   </div>
@@ -919,34 +1033,86 @@
 
 <!-- lightbox -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="画像拡大表示">
-  <button class="lightbox-close" id="lightboxClose" aria-label="閉じる">×</button>
+  <button class="lightbox-close" id="lightboxClose" aria-label="閉じる">✕</button>
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
 </div>
+
+
+<!-- ════ SHOWCASE ════ -->
+<section id="showcase" aria-label="注目デザイン">
+  <div class="container">
+    <div class="showcase-head reveal">
+      <span class="section-label">showcase</span>
+      <h2 class="h-en">Featured Works</h2>
+      <p class="sub-label">注目作品</p>
+    </div>
+    <div class="showcase-grid">
+      <div class="showcase-item reveal">
+        <div class="showcase-img">
+          <img src="images/nail-designs/nail-design-13.jpg"
+               alt="注目作品 01" loading="lazy" width="600" height="800">
+        </div>
+        <div class="showcase-text">
+          <div class="rule"></div>
+          <p class="showcase-title">季節を映す、AIの眼</p>
+          <p class="showcase-desc">
+            自然界の移ろいをAIが独自の視点で解釈した作品。
+            人の目では気づかぬ微細なパターンが、
+            画面の中に静かに宿っています。
+          </p>
+          <div class="tags" style="margin-top:1.2rem">
+            <span class="tag">季節デザイン</span>
+            <span class="tag">AI生成</span>
+          </div>
+        </div>
+      </div>
+      <div class="showcase-item reveal reveal-d1">
+        <div class="showcase-img">
+          <img src="images/nail-designs/nail-design-02.jpg"
+               alt="注目作品 02" loading="lazy" width="600" height="800">
+        </div>
+        <div class="showcase-text">
+          <div class="rule"></div>
+          <p class="showcase-title">抽象と具象の間で</p>
+          <p class="showcase-desc">
+            プロンプトの言葉がAIの解釈を経て、
+            想像の外へと連れ出してくれる瞬間。
+            この作品は、その驚きをそのまま残しました。
+          </p>
+          <div class="tags" style="margin-top:1.2rem">
+            <span class="tag">アートネイル</span>
+            <span class="tag">AI生成</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <!-- ════ PROCESS ════ -->
 <section id="process" aria-label="制作プロセス">
   <div class="container">
     <div class="process-head reveal">
-      <span class="section-label">Process</span>
-      <h2 class="heading-gradient h2">How We Create</h2>
-      <p style="font-size:.78rem;letter-spacing:.14em;color:var(--text-muted);margin-top:.5rem">AI活用プロセス</p>
+      <span class="section-label">process</span>
+      <h2 class="h-en">How We Create</h2>
+      <p class="sub-label">AI活用プロセス</p>
     </div>
     <div class="step-grid">
       <article class="step-card reveal reveal-d1">
         <div class="step-num" aria-hidden="true">01</div>
         <h3 class="step-title">プロンプト設計</h3>
-        <p class="step-body">テーマやスタイルを分析し、AIへの指示（プロンプト）を精密に設計します。色彩・構図・スタイルを言語で定義します。</p>
+        <p class="step-body">テーマ・スタイル・色彩を言語で精密に定義します。AIへの指示は、丁寧な言葉選びから始まります。</p>
       </article>
       <article class="step-card reveal reveal-d2">
         <div class="step-num" aria-hidden="true">02</div>
         <h3 class="step-title">AI生成 &amp; 選定</h3>
-        <p class="step-body">複数のAIツールで画像を生成し、品質・テーマへの適合度・独自性の観点から最良の作品を選定します。</p>
+        <p class="step-body">複数のAIツールで生成を繰り返し、品質・独自性・テーマとの整合性を基準に作品を選定します。</p>
       </article>
       <article class="step-card reveal reveal-d3">
         <div class="step-num" aria-hidden="true">03</div>
         <h3 class="step-title">仕上げ &amp; 活用</h3>
-        <p class="step-body">生成画像を調整・編集し、実際のサービスや提案資料に活用。フィードバックを次のプロンプト設計に活かします。</p>
+        <p class="step-body">生成画像を丁寧に調整・編集し、提案資料や実際のサービスへと昇華させます。</p>
       </article>
     </div>
   </div>
@@ -958,11 +1124,12 @@
   <div class="container">
     <div class="contact-grid">
       <div class="reveal">
-        <span class="section-label">Contact</span>
+        <span class="section-label">contact</span>
         <p class="contact-copy">
           お仕事のご依頼や<br>ご相談はお気軽に。
         </p>
-        <p class="body-text" style="margin-top:1rem">
+        <div class="rule"></div>
+        <p class="body-text">
           AIを活用したデザイン制作のご依頼、
           コラボレーションのご提案など、
           何でもお気軽にお問い合わせください。
@@ -970,22 +1137,22 @@
       </div>
       <form class="reveal reveal-d1" aria-label="お問い合わせフォーム" onsubmit="return false;">
         <div class="form-row required">
-          <label for="name">お名前</label>
+          <label for="name">name</label>
           <input id="name" type="text" name="name" placeholder="山田 太郎" autocomplete="name" required>
         </div>
         <div class="form-row required">
-          <label for="email">メールアドレス</label>
+          <label for="email">email</label>
           <input id="email" type="email" name="email" placeholder="example@email.com" autocomplete="email" required>
         </div>
         <div class="form-row">
-          <label for="message">メッセージ</label>
+          <label for="message">message</label>
           <textarea id="message" name="message" placeholder="お問い合わせ内容をご記入ください"></textarea>
         </div>
         <div class="form-submit">
           <button type="submit" class="btn btn-primary">
             送信する
-            <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
         </div>
@@ -999,10 +1166,7 @@
 <!-- ════ FOOTER ════ -->
 <footer id="footer" role="contentinfo">
   <div class="container footer-inner">
-    <span class="footer-logo">
-      <span class="logo-dot" aria-hidden="true"></span>
-      AI Portfolio
-    </span>
+    <span class="footer-logo">AI Portfolio</span>
     <span class="footer-copy">© 2026 AI Design Portfolio. Made with Claude.</span>
   </div>
 </footer>
@@ -1035,41 +1199,62 @@
   document.querySelectorAll('a[href^="#"]').forEach(a =>
     a.addEventListener('click', e => {
       e.preventDefault();
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
     })
   );
 
-  /* ── scroll reveal ── */
+  /* ── scroll reveal（能の所作 — ゆっくりと） ── */
   const io = new IntersectionObserver(
     entries => entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
     }),
-    { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    { threshold: 0.10, rootMargin: '0px 0px -40px 0px' }
   );
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal, .rule, .section-label').forEach(el => io.observe(el));
+
+  /* ── gallery filter ── */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      galleryItems.forEach(item => {
+        const show = filter === 'all' || item.dataset.cat === filter;
+        item.style.transition = 'opacity .40s ease, transform .40s ease';
+        item.style.opacity = show ? '1' : '0';
+        item.style.transform = show ? 'scale(1)' : 'scale(.96)';
+        item.style.pointerEvents = show ? '' : 'none';
+      });
+    });
+  });
 
   /* ── lightbox ── */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
-
-  document.querySelectorAll('.gallery-item').forEach(item => {
-    const open = () => {
-      const img = item.querySelector('img');
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    };
-    item.addEventListener('click', open);
-    item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') open(); });
-  });
-
+  const openLightbox = (src, alt) => {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
   const closeLightbox = () => {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
     lightboxImg.src = '';
   };
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const img = item.querySelector('img');
+    item.addEventListener('click', () => openLightbox(img.src, img.alt));
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') openLightbox(img.src, img.alt);
+    });
+  });
   document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
