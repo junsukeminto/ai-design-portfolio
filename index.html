@@ -505,7 +505,7 @@
       overflow: hidden;
       position: relative;
       border: 1px solid var(--border);
-      cursor: crosshair;
+      cursor: pointer;
       transition: opacity .40s ease, transform .40s ease, border-color .40s ease;
     }
     .gallery-item:hover {
@@ -1070,7 +1070,7 @@
 <!-- lightbox -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="画像拡大表示">
   <button class="lightbox-close" id="lightboxClose" aria-label="閉じる">✕</button>
-  <img class="lightbox-img" id="lightboxImg" src="" alt="" onerror="this.alt='画像を読み込めませんでした'">
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
 </div>
 
 
@@ -1262,6 +1262,7 @@
   /* ── gallery filter ── */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const galleryItems = document.querySelectorAll('.gallery-item');
+  const hideTimers = new WeakMap();
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => {
@@ -1272,6 +1273,8 @@
       btn.setAttribute('aria-pressed', 'true');
       const filter = btn.dataset.filter;
       galleryItems.forEach(item => {
+        const pending = hideTimers.get(item);
+        if (pending) { clearTimeout(pending); hideTimers.delete(item); }
         const show = filter === 'all' || item.dataset.cat === filter;
         if (show) {
           item.style.display = '';
@@ -1282,7 +1285,10 @@
         } else {
           item.style.opacity = '0';
           item.style.transform = 'scale(.96)';
-          setTimeout(() => { item.style.display = 'none'; }, 400);
+          hideTimers.set(item, setTimeout(() => {
+            item.style.display = 'none';
+            hideTimers.delete(item);
+          }, 400));
         }
       });
     });
@@ -1294,8 +1300,13 @@
   const lightboxClose = document.getElementById('lightboxClose');
   let lightboxTrigger = null;
 
+  lightboxImg.addEventListener('error', () => {
+    lightboxImg.style.display = 'none';
+    lightboxImg.alt = '画像を読み込めませんでした';
+  });
   const openLightbox = (src, alt, trigger) => {
     lightboxTrigger = trigger || null;
+    lightboxImg.style.display = '';
     lightboxImg.src = src;
     lightboxImg.alt = alt;
     lightbox.classList.add('active');
@@ -1305,7 +1316,7 @@
   const closeLightbox = () => {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
-    lightboxImg.src = '';
+    lightboxImg.removeAttribute('src');
     if (lightboxTrigger) {
       lightboxTrigger.focus();
       lightboxTrigger = null;
