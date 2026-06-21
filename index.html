@@ -27,7 +27,7 @@
       --accent:        #c9a84c;   /* 金茶 */
       --accent-rgb:    201,168,76;
       --text:          #f5f0e8;   /* 和紙色 */
-      --text-muted:    #7a7370;   /* 煤色 */
+      --text-muted:    #8f8a87;   /* 煤色 — WCAG AA 4.5:1+ on --bg */
       --border:        rgba(245,240,232,.08);
       --border-accent: rgba(201,168,76,.20);
 
@@ -230,7 +230,7 @@
     .logo-kana {
       display: block;
       font-style: normal;
-      font-size: .50rem;
+      font-size: .625rem;
       letter-spacing: .30em;
       color: var(--text-muted);
       margin-top: .15rem;
@@ -506,7 +506,7 @@
       position: relative;
       border: 1px solid var(--border);
       cursor: crosshair;
-      transition: border-color .40s ease;
+      transition: opacity .40s ease, transform .40s ease, border-color .40s ease;
     }
     .gallery-item:hover {
       border-color: rgba(var(--accent-rgb), .25);
@@ -537,7 +537,8 @@
       opacity: 0;
       transition: opacity .45s ease;
     }
-    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-item:hover .gallery-overlay,
+    .gallery-item:focus-within .gallery-overlay { opacity: 1; }
     .overlay-label {
       font-family: 'Cormorant Garamond', serif;
       font-size: .68rem;
@@ -677,7 +678,7 @@
       transition: transform .80s ease;
     }
     .showcase-img:hover img { transform: scale(1.03); }
-    .showcase-text {}
+    .showcase-text .tags { margin-top: 1.2rem; }
     .showcase-title {
       font-family: 'Noto Serif JP', 'Yu Mincho', serif;
       font-size: 1.1rem;
@@ -748,7 +749,6 @@
       font-size: .88rem;
       font-weight: 300;
       font-family: 'Noto Sans JP', sans-serif;
-      outline: none;
       transition: border-color .40s;
     }
     .form-row input::placeholder,
@@ -867,32 +867,66 @@
       .btn { justify-content: center; }
       .filter-tabs { gap: .3rem; }
     }
+
+    /* ═══════════════════════════════════════
+       ACCESSIBILITY
+    ═══════════════════════════════════════ */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 999;
+      padding: .6rem 1.2rem;
+      background: var(--accent);
+      color: #1a1814;
+      font-size: .82rem;
+      border-radius: 3px;
+    }
+    .skip-link:focus { top: .5rem; }
+
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .hero-img-clip { clip-path: none; }
+    }
   </style>
 </head>
 <body>
 
+<a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+
 <!-- ════ HEADER ════ -->
 <header id="header" role="banner">
   <div class="container header-inner">
-    <a href="#" class="logo" aria-label="AI Portfolio ホームへ">
-      AI Portfolio
-      <span class="logo-kana">ai design works</span>
+    <a href="#hero" class="logo" aria-label="AI Portfolio ホームへ">
+      <span lang="en">AI Portfolio</span>
+      <span class="logo-kana" lang="en">ai design works</span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="メニュー" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <nav class="nav-bar" id="navBar" role="navigation" aria-label="メインナビゲーション">
-      <a href="#about">Concept</a>
-      <a href="#works">Works</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Contact</a>
+      <a href="#about" lang="en">Concept</a>
+      <a href="#works" lang="en">Works</a>
+      <a href="#process" lang="en">Process</a>
+      <a href="#contact" lang="en">Contact</a>
     </nav>
   </div>
 </header>
 
 
 <!-- ════ HERO ════ -->
-<main>
+<main id="main">
 <section id="hero" aria-label="ヒーロー">
   <div class="hero-text">
     <span class="section-label visible">
@@ -968,65 +1002,65 @@
   <div class="container">
     <div class="works-head reveal">
       <span class="section-label">works</span>
-      <h2 class="h-en">Nail Design Gallery</h2>
+      <h2 class="h-en" lang="en">Nail Design Gallery</h2>
       <p class="sub-label">AI生成 ネイルデザイン一覧</p>
       <div class="rule"></div>
     </div>
 
     <div class="filter-tabs reveal reveal-d1" role="group" aria-label="フィルター">
-      <button class="filter-btn active" data-filter="all">すべて</button>
-      <button class="filter-btn" data-filter="simple">シンプル</button>
-      <button class="filter-btn" data-filter="art">アート</button>
-      <button class="filter-btn" data-filter="season">季節</button>
+      <button class="filter-btn active" data-filter="all" aria-pressed="true">すべて</button>
+      <button class="filter-btn" data-filter="simple" aria-pressed="false">シンプル</button>
+      <button class="filter-btn" data-filter="art" aria-pressed="false">アート</button>
+      <button class="filter-btn" data-filter="season" aria-pressed="false">季節</button>
     </div>
 
     <div class="gallery reveal reveal-d2" role="list" aria-label="ネイルデザイン一覧">
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="simple">
-        <img src="images/nail-designs/nail-design-01.jpg" alt="AI生成ネイルデザイン 01" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-01.jpg" alt="ネイルサロンでの施術風景、UV硬化ライトと細筆による丁寧な仕上げ" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
-        <img src="images/nail-designs/nail-design-02.jpg" alt="AI生成ネイルデザイン 02" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-02.jpg" alt="ブラックとべっ甲柄を組み合わせたモードなネイルデザイン" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
-        <img src="images/nail-designs/nail-design-03.jpg" alt="AI生成ネイルデザイン 03" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-03.jpg" alt="透明感のあるナチュラルピンクのシンプルネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="season">
-        <img src="images/nail-designs/nail-design-04.jpg" alt="AI生成ネイルデザイン 04" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-04.jpg" alt="ラベンダーとホワイト、シルバーグリッターの冬カラーネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
-        <img src="images/nail-designs/nail-design-06.jpg" alt="AI生成ネイルデザイン 06" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-06.jpg" alt="淡いピンクのワンカラーで仕上げたナチュラルネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="simple">
-        <img src="images/nail-designs/nail-design-07.jpg" alt="AI生成ネイルデザイン 07" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-07.jpg" alt="赤のグラデーションにLOVEの手書きレタリングネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
-        <img src="images/nail-designs/nail-design-08.jpg" alt="AI生成ネイルデザイン 08" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-08.jpg" alt="カラフルなポップアート風マーブル模様のネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="season">
-        <img src="images/nail-designs/nail-design-09.jpg" alt="AI生成ネイルデザイン 09" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-09.jpg" alt="ピンク背景に映えるラベンダーカラーのワンカラーネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="simple">
-        <img src="images/nail-designs/nail-design-10.jpg" alt="AI生成ネイルデザイン 10" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-10.jpg" alt="ブラックとべっ甲柄のシックなショートネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
-        <img src="images/nail-designs/nail-design-12.jpg" alt="AI生成ネイルデザイン 12" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-12.jpg" alt="マットレッドのワンカラーネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="season">
-        <img src="images/nail-designs/nail-design-13.jpg" alt="AI生成ネイルデザイン 13" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-13.jpg" alt="パステルカラーのラベンダーとクリームのニュアンスネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
       <div class="gallery-item" role="listitem" tabindex="0" data-cat="art">
-        <img src="images/nail-designs/nail-design-14.jpg" alt="AI生成ネイルデザイン 14" loading="lazy" width="400" height="400">
+        <img src="images/nail-designs/nail-design-14.jpg" alt="レッドとホワイトのエスニック柄ロングネイル" loading="lazy" width="400" height="400">
         <div class="gallery-overlay"><span class="overlay-label">view</span></div>
       </div>
     </div>
@@ -1036,7 +1070,7 @@
 <!-- lightbox -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="画像拡大表示">
   <button class="lightbox-close" id="lightboxClose" aria-label="閉じる">✕</button>
-  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <img class="lightbox-img" id="lightboxImg" src="" alt="" onerror="this.alt='画像を読み込めませんでした'">
 </div>
 
 
@@ -1045,24 +1079,24 @@
   <div class="container">
     <div class="showcase-head reveal">
       <span class="section-label">showcase</span>
-      <h2 class="h-en">Featured Works</h2>
+      <h2 class="h-en" lang="en">Featured Works</h2>
       <p class="sub-label">注目作品</p>
     </div>
     <div class="showcase-grid">
       <div class="showcase-item reveal">
         <div class="showcase-img">
           <img src="images/nail-designs/nail-design-13.jpg"
-               alt="注目作品 01" loading="lazy" width="600" height="800">
+               alt="パステルカラーのラベンダーとクリームのニュアンスネイル — 季節を映す注目作品" loading="lazy" width="600" height="800">
         </div>
         <div class="showcase-text">
           <div class="rule"></div>
-          <p class="showcase-title">季節を映す、AIの眼</p>
+          <h3 class="showcase-title">季節を映す、AIの眼</h3>
           <p class="showcase-desc">
             自然界の移ろいをAIが独自の視点で解釈した作品。
             人の目では気づかぬ微細なパターンが、
             画面の中に静かに宿っています。
           </p>
-          <div class="tags" style="margin-top:1.2rem">
+          <div class="tags">
             <span class="tag">季節デザイン</span>
             <span class="tag">AI生成</span>
           </div>
@@ -1071,17 +1105,17 @@
       <div class="showcase-item reveal reveal-d1">
         <div class="showcase-img">
           <img src="images/nail-designs/nail-design-02.jpg"
-               alt="注目作品 02" loading="lazy" width="600" height="800">
+               alt="ブラックとべっ甲柄を組み合わせたモードなネイル — 抽象と具象の注目作品" loading="lazy" width="600" height="800">
         </div>
         <div class="showcase-text">
           <div class="rule"></div>
-          <p class="showcase-title">抽象と具象の間で</p>
+          <h3 class="showcase-title">抽象と具象の間で</h3>
           <p class="showcase-desc">
             プロンプトの言葉がAIの解釈を経て、
             想像の外へと連れ出してくれる瞬間。
             この作品は、その驚きをそのまま残しました。
           </p>
-          <div class="tags" style="margin-top:1.2rem">
+          <div class="tags">
             <span class="tag">アートネイル</span>
             <span class="tag">AI生成</span>
           </div>
@@ -1097,7 +1131,7 @@
   <div class="container">
     <div class="process-head reveal">
       <span class="section-label">process</span>
-      <h2 class="h-en">How We Create</h2>
+      <h2 class="h-en" lang="en">How We Create</h2>
       <p class="sub-label">AI活用プロセス</p>
     </div>
     <div class="step-grid">
@@ -1168,7 +1202,7 @@
 <!-- ════ FOOTER ════ -->
 <footer id="footer" role="contentinfo">
   <div class="container footer-inner">
-    <span class="footer-logo">AI Portfolio</span>
+    <span class="footer-logo" lang="en">AI Portfolio</span>
     <span class="footer-copy">© 2026 AI Design Portfolio. Made with Claude.</span>
   </div>
 </footer>
@@ -1184,26 +1218,24 @@
   /* ── hamburger ── */
   const toggle = document.getElementById('navToggle');
   const navBar = document.getElementById('navBar');
+  const closeNav = () => {
+    if (!navBar.classList.contains('open')) return;
+    navBar.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
   toggle.addEventListener('click', () => {
     const open = navBar.classList.toggle('open');
     toggle.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-expanded', String(open));
   });
   navBar.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => {
-      navBar.classList.remove('open');
-      toggle.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    })
+    a.addEventListener('click', closeNav)
   );
 
   /* ── mobile nav: close on resize to desktop ── */
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 960) {
-      navBar.classList.remove('open');
-      toggle.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    }
+    if (window.innerWidth > 960) closeNav();
   }, { passive: true });
 
   /* ── smooth scroll ── */
@@ -1232,12 +1264,15 @@
   const galleryItems = document.querySelectorAll('.gallery-item');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       const filter = btn.dataset.filter;
       galleryItems.forEach(item => {
         const show = filter === 'all' || item.dataset.cat === filter;
-        item.style.transition = 'opacity .40s ease, transform .40s ease';
         if (show) {
           item.style.display = '';
           requestAnimationFrame(() => {
@@ -1256,52 +1291,59 @@
   /* ── lightbox ── */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
-  const openLightbox = (src, alt) => {
+  const lightboxClose = document.getElementById('lightboxClose');
+  let lightboxTrigger = null;
+
+  const openLightbox = (src, alt, trigger) => {
+    lightboxTrigger = trigger || null;
     lightboxImg.src = src;
     lightboxImg.alt = alt;
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
+    setTimeout(() => lightboxClose.focus(), 50);
   };
   const closeLightbox = () => {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
     lightboxImg.src = '';
+    if (lightboxTrigger) {
+      lightboxTrigger.focus();
+      lightboxTrigger = null;
+    }
   };
   document.querySelectorAll('.gallery-item').forEach(item => {
     const img = item.querySelector('img');
-    item.addEventListener('click', () => openLightbox(img.src, img.alt));
+    item.addEventListener('click', () => openLightbox(img.src, img.alt, item));
     item.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') openLightbox(img.src, img.alt);
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(img.src, img.alt, item);
+      }
     });
   });
-  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-  /* ── lightbox focus trap ── */
+  /* ── lightbox keyboard: Escape to close, Tab trap ── */
   lightbox.addEventListener('keydown', e => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      document.getElementById('lightboxClose').focus();
-    }
-  });
-  const origOpenLightbox = openLightbox;
-  /* focus close button when lightbox opens */
-  document.querySelectorAll('.gallery-item').forEach(item => {
-    item.addEventListener('click', () => {
-      setTimeout(() => document.getElementById('lightboxClose').focus(), 50);
-    });
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'Tab') { e.preventDefault(); lightboxClose.focus(); }
   });
 
   /* ── contact form: mailto fallback ── */
-  document.getElementById('contactForm').addEventListener('submit', e => {
+  const emailAddr = ['junsukeminto', 'gmail.com'].join('@');
+  const contactForm = document.getElementById('contactForm');
+  contactForm.addEventListener('submit', e => {
     e.preventDefault();
     const name    = document.getElementById('name').value.trim();
     const email   = document.getElementById('email').value.trim();
     const message = document.getElementById('message').value.trim();
-    if (!name || !email) return;
+    if (!name || !email) {
+      contactForm.querySelector(':invalid')?.focus();
+      return;
+    }
     const body = encodeURIComponent(`お名前: ${name}\nメールアドレス: ${email}\n\n${message}`);
-    window.location.href = `mailto:junsukeminto@gmail.com?subject=${encodeURIComponent(`【AI Portfolio】${name}様よりお問い合わせ`)}&body=${body}`;
+    window.location.href = `mailto:${emailAddr}?subject=${encodeURIComponent(`【AI Portfolio】${name}様よりお問い合わせ`)}&body=${body}`;
   });
 </script>
 
