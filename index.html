@@ -7,6 +7,8 @@
   <meta property="og:title" content="AI Design Portfolio">
   <meta property="og:description" content="AIとともに生まれる、新しいネイルデザインの世界。">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://junsukeminto.github.io/ai-design-portfolio/images/nail-designs/nail-design-05.jpg">
+  <meta property="og:url" content="https://junsukeminto.github.io/ai-design-portfolio/">
   <title>AI Design Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +35,7 @@
       --header-h:    72px;
       --max-w:       1200px;
       --pad-x:       clamp(1.5rem, 5vw, 5rem);
-      --section-py:  clamp(5rem, 10vw, 9rem);
+      --section-py:  clamp(7rem, 10vw, 12rem);
     }
 
     /* ═══════════════════════════════════════
@@ -1135,7 +1137,7 @@
           何でもお気軽にお問い合わせください。
         </p>
       </div>
-      <form class="reveal reveal-d1" aria-label="お問い合わせフォーム" onsubmit="return false;">
+      <form class="reveal reveal-d1" aria-label="お問い合わせフォーム" id="contactForm">
         <div class="form-row required">
           <label for="name">name</label>
           <input id="name" type="text" name="name" placeholder="山田 太郎" autocomplete="name" required>
@@ -1195,6 +1197,15 @@
     })
   );
 
+  /* ── mobile nav: close on resize to desktop ── */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960) {
+      navBar.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  }, { passive: true });
+
   /* ── smooth scroll ── */
   document.querySelectorAll('a[href^="#"]').forEach(a =>
     a.addEventListener('click', e => {
@@ -1227,9 +1238,17 @@
       galleryItems.forEach(item => {
         const show = filter === 'all' || item.dataset.cat === filter;
         item.style.transition = 'opacity .40s ease, transform .40s ease';
-        item.style.opacity = show ? '1' : '0';
-        item.style.transform = show ? 'scale(1)' : 'scale(.96)';
-        item.style.pointerEvents = show ? '' : 'none';
+        if (show) {
+          item.style.display = '';
+          requestAnimationFrame(() => {
+            item.style.opacity = '1';
+            item.style.transform = 'scale(1)';
+          });
+        } else {
+          item.style.opacity = '0';
+          item.style.transform = 'scale(.96)';
+          setTimeout(() => { item.style.display = 'none'; }, 400);
+        }
       });
     });
   });
@@ -1258,6 +1277,32 @@
   document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  /* ── lightbox focus trap ── */
+  lightbox.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      document.getElementById('lightboxClose').focus();
+    }
+  });
+  const origOpenLightbox = openLightbox;
+  /* focus close button when lightbox opens */
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      setTimeout(() => document.getElementById('lightboxClose').focus(), 50);
+    });
+  });
+
+  /* ── contact form: mailto fallback ── */
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    if (!name || !email) return;
+    const body = encodeURIComponent(`お名前: ${name}\nメールアドレス: ${email}\n\n${message}`);
+    window.location.href = `mailto:junsukeminto@gmail.com?subject=${encodeURIComponent(`【AI Portfolio】${name}様よりお問い合わせ`)}&body=${body}`;
+  });
 </script>
 
 </body>
